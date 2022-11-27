@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
 from scripts.download_file import download_file
 from scripts.extract_tables import extract_tables
@@ -56,6 +57,11 @@ with DAG('desafio_raizen', default_args=default_args, schedule_interval=None ) a
         jars=postgres_driver_jar,
         driver_class_path=postgres_driver_jar,
         )
+    
+    upload_to_datalake = BashOperator(
+        task_id      = "upload_to_datalake",
+        bash_command = "sleep 10s")
+
  
-download_file>>extract_tables>>spark_job_processing_tables
+download_file>>extract_tables>>spark_job_processing_tables>>upload_to_datalake
 
