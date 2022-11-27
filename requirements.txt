@@ -9,3 +9,4 @@
 
 apache-airflow-providers-apache-spark
 xlrd==2.0.1
+pyspark==3.2.2

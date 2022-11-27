@@ -59,6 +59,9 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
   volumes:
+
+    - ./spark/app:/usr/local/spark/app #Spark Scripts (Must be the same path in airflow and Spark Cluster)
+    - ./spark/resources:/usr/local/spark/resources #Resources folder (Must be the same path in airflow and Spark Cluster)
     - ./data:/usr/local/data
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -73,17 +76,23 @@ x-airflow-common:
 services:
   postgres:
     image: postgres:13
+    networks:
+            - default_net
+
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 5s
       retries: 5
     restart: always
+    ports:
+            - "5432:5432"
+  
 
 
   airflow-webserver:
@@ -101,6 +110,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+            - default_net
 
   airflow-scheduler:
     <<: *airflow-common
@@ -115,6 +126,8 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+    networks:
+            - default_net
 
   airflow-triggerer:
     <<: *airflow-common
@@ -129,6 +142,9 @@ services:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+    networks:
+            - default_net
 
   airflow-init:
     <<: *airflow-common
@@ -208,6 +224,8 @@ services:
     user: "0:0"
     volumes:
       - .:/sources
+    networks:
+            - default_net
 
   airflow-cli:
     <<: *airflow-common
@@ -221,6 +239,8 @@ services:
       - bash
       - -c
       - airflow
+    networks:
+            - default_net
       
 
   # You can enable flower by adding "--profile flower" option e.g. docker-compose --profile flower up
@@ -230,3 +250,6 @@ services:
 
 volumes:
   postgres-db-volume:
+
+networks:
+    default_net:

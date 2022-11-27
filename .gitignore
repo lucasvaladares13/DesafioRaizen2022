@@ -139,3 +139,4 @@ part-*
 *.pyc
 logs/
 data/
+spark_files/

@@ -10,11 +10,12 @@ from datetime import datetime
 ###############################################
 # Parameters
 ###############################################
-spark_master = "spark://spark:7077"
+spark_master = "spark/172.24.0.5:7077"
 postgres_driver_jar = "/usr/local/spark/resources/jars/postgresql-9.4.1207.jar"
 
-movies_file = "/usr/local/spark/resources/data/movies.csv"
-ratings_file = "/usr/local/spark/resources/data/ratings.csv"
+trust_path = "/usr/local/data/1_trusted"
+refine_path = "/usr/local/data/2_refined"
+
 postgres_db = "jdbc:postgresql://postgres/test"
 postgres_user = "test"
 postgres_pwd = "postgres"
@@ -51,7 +52,7 @@ with DAG('desafio_raizen', default_args=default_args, schedule_interval=None ) a
         conn_id="spark_default",
         verbose=1,
         conf={"spark.master":spark_master},
-        application_args=[postgres_db,postgres_user,postgres_pwd],
+        application_args=[trust_path,refine_path],
         jars=postgres_driver_jar,
         driver_class_path=postgres_driver_jar,
         )
