@@ -1,3 +1,6 @@
+https://github.com/lucasvaladares13/DesafioRaizen2022.git
+
+https://github.com/lucasvaladares13/DesafioRaizen2022.git
 
 # Airflow Spark - Desafio Raizen
 
@@ -42,7 +45,7 @@ This project contains the following containers:
 
 ### Clone project
 
-    $ git clone https://github.com/cordon-thiago/airflow-spark
+    $ git clone https://github.com/lucasvaladares13/DesafioRaizen2022.git
 
 ### Build airflow Docker
 
