@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project
+misc.txt
+dags/__pycache__
+dags/scripts/__pycache__
+.ipynb_checkpoints
+.part*
+part-*
+*_SUCCESS*
+*.pyc
+logs/
+data/
