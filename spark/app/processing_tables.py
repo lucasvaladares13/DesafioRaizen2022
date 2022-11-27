@@ -85,7 +85,8 @@ df = join_csv(trust_path)
 df.show(1000)
 
 #df.write.format("parquet").partitionBy('year_month').mode('overwrite').save(refine_path)
-
+df = df.toPandas()
+df.to_parquet(refine_path, engine = 'auto' ,partition_cols= ['product','uf'],)
 spark.stop()
 
 
