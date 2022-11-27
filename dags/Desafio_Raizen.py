@@ -10,7 +10,7 @@ from datetime import datetime
 ###############################################
 # Parameters
 ###############################################
-spark_master = "spark/172.24.0.5:7077"
+spark_master = "spark/spark:7077"
 postgres_driver_jar = "/usr/local/spark/resources/jars/postgresql-9.4.1207.jar"
 
 trust_path = "/usr/local/data/1_trusted"

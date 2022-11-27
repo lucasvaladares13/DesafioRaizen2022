@@ -29,7 +29,7 @@ services:
             - default_net
         environment:
             - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://172.24.0.5:7077
+            - SPARK_MASTER_URL=spark://spark:7077
             - SPARK_WORKER_MEMORY=1G
             - SPARK_WORKER_CORES=1
             - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -48,7 +48,7 @@ services:
             - default_net
         environment:
             - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://172.24.0.5:7077
+            - SPARK_MASTER_URL=spark://spark:7077
             - SPARK_WORKER_MEMORY=1G
             - SPARK_WORKER_CORES=1
             - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -67,7 +67,7 @@ services:
             - default_net
         environment:
             - SPARK_MODE=worker
-            - SPARK_MASTER_URL=spark://172.24.0.5:7077
+            - SPARK_MASTER_URL=spark://spark:7077
             - SPARK_WORKER_MEMORY=1G
             - SPARK_WORKER_CORES=1
             - SPARK_RPC_AUTHENTICATION_ENABLED=no
@@ -80,17 +80,17 @@ services:
             - ./spark/resources:/usr/local/spark/resources #Resources folder (Must be the same path in airflow and Spark Cluster)
 
     #Jupyter notebook
-    jupyter-spark:
-        image: jupyter/pyspark-notebook:spark-3.1.2
-        networks:
-            - default_net
-        ports:
-          - "8888:8888"
-          - "4040-4080:4040-4080"
-        volumes:
-          - ./notebooks:/home/jovyan/work/notebooks/
-          - ./spark/resources/data:/home/jovyan/work/data/
-          - ./spark/resources/jars:/home/jovyan/work/jars/
+    #jupyter-spark:
+    #    image: jupyter/pyspark-notebook:spark-3.1.2
+    #    networks:
+    #        - default_net
+    #    ports:
+    #      - "8888:8888"
+    #      - "4040-4080:4040-4080"
+    #    volumes:
+    #      - ./notebooks:/home/jovyan/work/notebooks/
+    #      - ./spark/resources/data:/home/jovyan/work/data/
+    #      - ./spark/resources/jars:/home/jovyan/work/jars/
 
 networks:
     default_net:
