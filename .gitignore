@@ -145,3 +145,4 @@ spark_files/
 .dev_notebooks/dados/0_raw/*
 .dev_notebooks/dados/1_trusted/*
 .dev_notebooks/dados/2_refined/*
+.cfg
