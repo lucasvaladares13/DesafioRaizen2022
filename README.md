@@ -1,6 +1,3 @@
-https://github.com/lucasvaladares13/DesafioRaizen2022.git
-
-https://github.com/lucasvaladares13/DesafioRaizen2022.git
 
 # Airflow Spark - Desafio Raizen
 
