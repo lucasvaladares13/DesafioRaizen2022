@@ -3,7 +3,7 @@
 
 This project contains the following containers:
 
-* postgres: Postgres database for Airflow metadata and a Test database to test whatever you want.
+* postgres: Postgres database for Airflow metadata.
 
   * Image: postgres:13
   * Database Port: 5432
@@ -67,13 +67,6 @@ Navigate to /docker and:
 Airflow: http://localhost:8080
 
 Spark Master: http://localhost:8181
-
-PostgreSql - Database Test:
-
-* Server: localhost:5432
-* Database: test
-* User: test
-* Password: postgres
 
 Postgres - Database airflow:
 
