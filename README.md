@@ -43,6 +43,12 @@ This project contains the following containers:
 ### Clone project
 
     $ git clone https://github.com/lucasvaladares13/DesafioRaizen2022.git
+    
+### Create .env file
+    
+Navigate to /docker and:   
+
+    $ echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 
 ### Build airflow Docker
 
