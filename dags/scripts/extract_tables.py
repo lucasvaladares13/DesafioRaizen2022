@@ -47,7 +47,7 @@ def extract_tables():
     list_mes = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO']
     list_ano = str(list(range(1995,2023))).strip('[]').split(', ')
 
-    df = pd.read_excel(raw_file, keep_default_na=False)
+    df = pd.read_excel(raw_file,engine='xlrd', keep_default_na=False)
 
     table_ref = get_idx_product(df,produtc_list)
 
