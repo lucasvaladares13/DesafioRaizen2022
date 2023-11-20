@@ -8,6 +8,7 @@
 
 pandas
 apache-airflow-providers-apache-spark
+apache-airflow-providers-microsoft-azure
 xlrd==2.0.1
 pyspark==3.2.2
 openpyxl

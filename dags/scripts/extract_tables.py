@@ -39,9 +39,55 @@ def get_table(df,idx,list_mes,list_ano,product):
 
     return  dt
 
+def get_blob_file():
+    from airflow.providers.microsoft.azure.hooks.wasb import WasbHook
+    from datetime import datetime
+    # Defina as informações do seu Blob Storage
+    SOURCE_CONTAINER_NAME = 'desafioraizen/staging'
+    SOURCE_BLOB_NAME = 'vendas-combustiveis-m3_staging.xls'
+
+
+    # Configurações do seu Blob Storage
+    WASB_CONNECTION_STRING = 'blob_storage'
+
+    print("TEST LIST BLOBS")
+    source_hook = WasbHook(wasb_conn_id=WASB_CONNECTION_STRING)
+    source_hook.get_file(file_path = '/tmp/vendas-combustiveis.xls' ,container_name=SOURCE_CONTAINER_NAME, blob_name=SOURCE_BLOB_NAME)
+    # blob_list = source_hook.get_blobs_list(container_name = SOURCE_CONTAINER_NAME)
+    # print(list(blob_list))
+
+    return '/tmp/vendas-combustiveis.xls'
+
+def load_blob_file(list_tables):
+    from airflow.providers.microsoft.azure.hooks.wasb import WasbHook
+    from datetime import datetime
+    # Defina as informações do seu Blob Storage
+    
+    DESTINATION_CONTAINER_NAME = 'desafioraizen/processing'
+    
+  
+    # Configurações do seu Blob Storage
+    WASB_CONNECTION_STRING = 'blob_storage'
+
+    print("TEST LIST BLOBS")
+    source_hook = WasbHook(wasb_conn_id=WASB_CONNECTION_STRING)
+
+    for table in list_tables:
+        table_name = str(table).split('/')[-1]
+        source_hook.load_file(file_path = table, container_name=DESTINATION_CONTAINER_NAME, blob_name=table_name)
+    
+
+
+
+    
+    
+
+
+    
 def extract_tables():
-    raw_file = '/usr/local/data/0_raw/vendas-combustiveis-m3.xls'
-    trust_path = '/usr/local/data/1_trusted/'
+    raw_file = get_blob_file()
+    
+
 
     produtc_list = ['ÓLEO DIESEL TOTAL','GLP TOTAL']
     list_mes = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO']
@@ -51,10 +97,22 @@ def extract_tables():
 
     table_ref = get_idx_product(df,produtc_list)
 
+    list_tables = []
+
     for key in table_ref.keys():
 
         print(table_ref[key])
         for idx in table_ref[key]:
             dt = get_table(df,idx,list_mes,list_ano,key)
-            
-            dt.to_csv(f'{trust_path}/{idx}_tables_{datetime.utcnow().strftime("%Y-%m-%d_%H.%M.%S")}.csv', index = False)
+
+            name_table = f'{idx}_tables_{datetime.utcnow().strftime("%Y-%m-%d_%H.%M.%S")}.csv'
+            print(name_table)
+            list_tables.append(f'/tmp/{name_table}')
+
+            dt.to_csv(f'/tmp/{name_table}', index = False)
+    
+    print(list_tables)
+    
+    load_blob_file(list_tables)
+
+    
