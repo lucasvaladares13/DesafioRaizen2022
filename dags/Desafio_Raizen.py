@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.utils.dates import days_ago
 from airflow.operators.python import PythonOperator
 from airflow.operators.bash import BashOperator
-from airflow.contrib.operators.spark_submit_operator import SparkSubmitOperator
+from airflow.providers.databricks.operators.databricks import DatabricksSubmitRunOperator
 from scripts.download_file import download_file
 from scripts.extract_tables import extract_tables
  
@@ -46,22 +46,24 @@ with DAG('desafio_raizen', default_args=default_args, schedule_interval=None ) a
         
     )
 
-    spark_job_processing_tables = SparkSubmitOperator(
-        task_id="spark_job_processing_tables",
-        application="/usr/local/spark/app/processing_tables.py", # Spark application path created in airflow and spark cluster
-        name="processing_tables",
-        conn_id="spark_default",
-        verbose=1,
-        conf={"spark.master":spark_master},
-        application_args=[trust_path,refine_path],
-        jars=postgres_driver_jar,
-        driver_class_path=postgres_driver_jar,
+    dbr_notebook_processing_tables = {"notebook_path": "/Users/lucas.acipreste@aluno.ufop.edu.br/Compile_Tables"}
+    databricks_job_processing_tables = DatabricksSubmitRunOperator(
+        task_id="Databricks_job_processing_tables",
+        databricks_conn_id="azure_databricks", 
+        existing_cluster_id="1121-035510-bj51vk5w",
+        notebook_task= dbr_notebook_processing_tables,
+        
         )
     
-    upload_to_datalake = BashOperator(
-        task_id      = "upload_to_datalake",
-        bash_command = "sleep 10s")
+    dbr_notebook_upload_to_SQL = {"notebook_path": "/Users/lucas.acipreste@aluno.ufop.edu.br/Upload_To_Azure_SQL"}
+    upload_to_SQL = DatabricksSubmitRunOperator(
+        task_id="Databricks_job_load_data_to_SQL",
+        databricks_conn_id="azure_databricks", 
+        existing_cluster_id="1121-035510-bj51vk5w",
+        notebook_task= dbr_notebook_upload_to_SQL,
+        
+        )
 
  
-download_file>>extract_tables>>spark_job_processing_tables>>upload_to_datalake
+download_file>>extract_tables>>databricks_job_processing_tables>>upload_to_SQL
 
