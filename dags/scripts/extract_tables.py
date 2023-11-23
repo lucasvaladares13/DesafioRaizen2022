@@ -74,7 +74,7 @@ def load_blob_file(list_tables):
 
     for table in list_tables:
         table_name = str(table).split('/')[-1]
-        source_hook.load_file(file_path = table, container_name=DESTINATION_CONTAINER_NAME, blob_name=table_name)
+        source_hook.load_file(file_path = table, container_name=DESTINATION_CONTAINER_NAME, blob_name=table_name, overwrite=True)
     
 
 
@@ -105,7 +105,7 @@ def extract_tables():
         for idx in table_ref[key]:
             dt = get_table(df,idx,list_mes,list_ano,key)
 
-            name_table = f'{idx}_tables_{datetime.utcnow().strftime("%Y-%m-%d_%H.%M.%S")}.csv'
+            name_table = f'{idx}_tables.csv' #_{datetime.utcnow().strftime("%Y-%m-%d_%H.%M.%S")}.csv'
             print(name_table)
             list_tables.append(f'/tmp/{name_table}')
 
