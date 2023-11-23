@@ -19,7 +19,7 @@ def download_file():
     source_hook = WasbHook(wasb_conn_id=WASB_CONNECTION_STRING)
     source_hook.get_file(file_path = '/tmp/vendas-combustiveis.xls' ,container_name=SOURCE_CONTAINER_NAME, blob_name=SOURCE_BLOB_NAME)
 
-    source_hook.load_file(file_path = '/tmp/vendas-combustiveis.xls', container_name=DESTINATION_CONTAINER_NAME, blob_name=DESTINATION_BLOB_NAME)
+    source_hook.load_file(file_path = '/tmp/vendas-combustiveis.xls', container_name=DESTINATION_CONTAINER_NAME, blob_name=DESTINATION_BLOB_NAME, overwrite=True)
 
 
 
