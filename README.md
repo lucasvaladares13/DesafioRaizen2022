@@ -1,60 +1,30 @@
+# Desafio Raizen
 
-# Airflow Spark - Desafio Raizen
+Este projeto tem como objetivo princiapal criar um pipeline de processamento de dados para extrair informações fornecidas do arquivo "vendas-combustiveis-m3.xls". E com objetivo secundario, demonstrar uma variedade de ferramentas e skill na area de engenharia de dados
 
-This project contains the following containers:
+## Arquitetura dos componentes
 
-* postgres: Postgres database for Airflow metadata.
-
-  * Image: postgres:13
-  * Database Port: 5432
-  * References: https://hub.docker.com/_/postgres
-* airflow-webserver: Airflow webserver and Scheduler.
-
-  * Image: docker-airflow-spark:2.3.3
-  * Port: 8080
-* spark: Spark Master.
-
-  * Image: bitnami/spark:3.1.2
-  * Port: 8181
-  * References:
-    * https://github.com/bitnami/bitnami-docker-spark
-    * https://hub.docker.com/r/bitnami/spark/tags/?page=1&ordering=last_updated
-* spark-worker-N: Spark workers. You can add workers copying the containers and changing the container name inside the docker-compose.yml file.
-
-  * Image: bitnami/spark:3.1.2
-  * References:
-    * https://github.com/bitnami/bitnami-docker-spark
-    * https://hub.docker.com/r/bitnami/spark/tags/?page=1&ordering=last_updated
-* jupyter-spark: Jupyter notebook with pyspark for interactive development.
-
-  * Image: jupyter/pyspark-notebook:spark-3.1.2
-  * Port: 8888
-  * References:
-    * https://hub.docker.com/layers/jupyter/pyspark-notebook/spark-3.1.2/images/sha256-37398efc9e51f868e0e1fde8e93df67bae0f9c77d3d3ce7fe3830faeb47afe4d?context=explore
-    * https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#jupyter-pyspark-notebook
-    * https://hub.docker.com/r/jupyter/pyspark-notebook/tags/
-
-## Architecture components
-
-![](./doc/architecture.png "Architecture")
+* Airflow para orquestração de todo pipeline de dados
+* Azure Databricks para executar os notebooks com codigos pyspark
+* Azure DataLake para armazenar todas as camadas de arquivos processados
+* Azure SQL Server para armazenar os dados finais da extração
+* Docker para conteinerização do projeto
 
 ## Setup
 
 ### Clone project
 
     $ git clone https://github.com/lucasvaladares13/DesafioRaizen2022.git
-    
-### Create .env file
-    
-Navigate to /docker and:   
 
-    $ echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
+### Create .env file
+
+Navigate to /docker and:
 
 ### Build airflow Docker
 
 Inside the docker/
 
-    $ docker build --rm --force-rm -t docker-airflow-spark:2.3.3 .
+    $ docker build --rm --force-rm -t docker-airflow:2.3.3 .
 
 ### Start airflow containers
 
@@ -62,21 +32,56 @@ Navigate to /docker and:
 
     $ docker-compose -f docker-compose.yaml up -d
 
-### Start spark containers
+### Portal Azure
 
-Navigate to /docker and:
+Criar o recurso do Databricks
 
-    $ docker-compose -f docker-compose-spark.yaml up -d
+Criar a conta de armazenamento blob storage e gerar chave token SAS
 
-### Check if you can access
+Criar o recurso SQL server
 
-Airflow: http://localhost:8080
+![1700705351563](image/README/1700705351563.png)
 
-Spark Master: http://localhost:8181
+### DataLake - Blob Storage
 
-Postgres - Database airflow:
+Criar a pasta cliente e carregar o arquivo "vendas-combustiveis-m3.xls"
 
-* Server: localhost:5432
-* Database: airflow
-* User: airflow
-* Password: airflow
+Criar as pastas staging, processing, compiled
+
+![1700705378039](image/README/1700705378039.png)
+
+![1700705541407](image/README/1700705541407.png)
+
+![1700705530965](image/README/1700705530965.png)
+
+![1700705505716](image/README/1700705505716.png)
+
+### Portal Databricks
+
+Criar cluster e armazenar valor do ID
+
+Criar workspace e carregar os notebooks
+
+![1700705391268](image/README/1700705391268.png)
+
+### Airflow
+
+Criar conexão com Azure_Blob_Storage
+
+Criar conexão com Azure_Databricks
+
+Executar DAG desafio_raizen
+
+![1700705452642](image/README/1700705452642.png)
+
+### SQL Server
+
+Dados para conexão e consulta no banco de dados:
+
+login: raizen_query
+
+password: desafio@2023
+
+Resultado consulta:
+
+![1700705406526](image/README/1700705406526.png)
