@@ -78,6 +78,10 @@ Executar DAG desafio_raizen
 
 Dados para conexão e consulta no banco de dados:
 
+Server: desafioraizen.database.windows.net
+
+Banco: db_desafio_raizen
+
 login: raizen_query
 
 password: desafio@2023
