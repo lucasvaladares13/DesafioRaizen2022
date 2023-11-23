@@ -10,25 +10,25 @@ Este projeto tem como objetivo princiapal criar um pipeline de processamento de 
 * Azure SQL Server para armazenar os dados finais da extração
 * Docker para conteinerização do projeto
 
-## Setup
+## Execução do projeto
 
-### Clone project
+### Clonar o projeto
 
     $ git clone https://github.com/lucasvaladares13/DesafioRaizen2022.git
 
-### Create .env file
+### Criar a imagem do airflow Docker
 
-Navigate to /docker and:
+Navegar para /docker:
 
-### Build airflow Docker
-
-Inside the docker/
+Executar o comando
 
     $ docker build --rm --force-rm -t docker-airflow:2.3.3 .
 
-### Start airflow containers
+### Iniciar os containers airflow
 
-Navigate to /docker and:
+Navegar para /docker:
+
+Executar o comando
 
     $ docker-compose -f docker-compose.yaml up -d
 
